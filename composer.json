@@ -1,0 +1,31 @@
+{
+    "name": "eve/dto",
+    "description": "Simplistic, flexible Data Transfer Object library",
+    "type": "library",
+    "require": {
+        "php": "^7.4",
+        "phpdocumentor/reflection-docblock": "^5.2",
+        "phpdocumentor/type-resolver": "^1.4"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5",
+        "eve/coding-standard": "^1.0"
+    },
+    "license": "MIT",
+    "minimum-stability": "stable",
+    "autoload": {
+        "psr-4": {
+            "Eve\\DTO\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit --colors=always",
+        "cs": "phpcs --standard=ruleset.xml",
+        "cs:fix": "phpcbf --standard=ruleset.xml"
+    }
+}

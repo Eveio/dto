@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<ruleset name="eve API">
+    <rule ref="./vendor/eve/coding-standard/ruleset.xml"/>
+
+    <file>./src</file>
+    <file>./tests</file>
+</ruleset>

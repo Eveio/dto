@@ -114,7 +114,7 @@ If any of the passed properties doesn't exist in the class definition or if the 
 
 ```php
 UserCreationData::make(['nope' => 'bar']); // throws "Public property $nope does not exist in class UserCreationData"
-UserCreationData::make(['email' => new Foo()); // throws 'UserCreationData::$email must be of type string, received a value of type Foo.',
+UserCreationData::make(['email' => new Foo()]); // throws 'UserCreationData::$email must be of type string, received a value of type Foo.',
 ```
 
 Then we can call the `toArray()` method to transform the object into an associative array:

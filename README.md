@@ -27,7 +27,7 @@ public function store(CreateUserRequest $request)
 
 This _kind of_ works, but with several drawbacks:
 
-* An associative array is pretty much unstructured—there's virtually no restriction no what can be put in it or what the data type of each element should be. This makes the code hard to reason about (no exact clue what's inside the array) and can lead to serious security issues.
+* An associative array is pretty much unstructured—there's virtually no restriction on what can be put in it or what the data type of each element should be. This makes the code hard to reason about (no exact clue what's inside the array) and can lead to serious security issues.
 * One would always have to refer to the documentation (if one exists) for the "shape" of the array. This reduces both reusability and productivity. 
 * Static code analysis and IDE auto-completion support are greatly hindered. 
 

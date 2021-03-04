@@ -19,7 +19,6 @@ class DataTransferObjectTypeTest extends TestCase
         self::assertEquals([
             'simple_prop' => 'foo',
             'nullable_prop' => 'bar',
-            'mixed_prop' => null,
         ], $data->toArray());
     }
 
@@ -28,10 +27,7 @@ class DataTransferObjectTypeTest extends TestCase
         $data = SampleData::make();
         $data->array_prop = ['foo' => 'bar'];
 
-        self::assertEquals([
-            'array_prop' => ['foo' => 'bar'],
-            'mixed_prop' => null,
-        ], $data->toArray());
+        self::assertEquals(['array_prop' => ['foo' => 'bar']], $data->toArray());
     }
 
     public function testObjectProperty(): void
@@ -40,15 +36,7 @@ class DataTransferObjectTypeTest extends TestCase
         $data = SampleData::make();
         $data->object_prop = $foo;
 
-        self::assertEquals([
-            'object_prop' => $foo,
-            'mixed_prop' => null,
-        ], $data->toArray());
-    }
-
-    public function testMixedPropertyIsIncludedByDefault(): void
-    {
-        self::assertSame(['mixed_prop' => null], SampleData::make()->toArray());
+        self::assertEquals(['object_prop' => $foo], $data->toArray());
     }
 
     /** @return array<mixed> */
@@ -88,10 +76,7 @@ class DataTransferObjectTypeTest extends TestCase
         $data = SampleData::make();
         $data->{$propName} = $value;
 
-        self::assertEquals([
-            $propName => $value,
-            'mixed_prop' => null,
-        ], $data->toArray());
+        self::assertEquals([$propName => $value], $data->toArray());
     }
 
     /** @return array<mixed> */
@@ -109,10 +94,15 @@ class DataTransferObjectTypeTest extends TestCase
         $data = SampleData::make();
         $data->union_prop = $value;
 
-        self::assertEquals([
-            'union_prop' => $value,
-            'mixed_prop' => null,
-        ], $data->toArray());
+        self::assertEquals(['union_prop' => $value], $data->toArray());
+    }
+
+    public function testNativeNullablePropertyAcceptsNull(): void
+    {
+        $data = SampleData::make();
+        $data->nullable_prop = null;
+
+        self::assertEquals(['nullable_prop' => null], $data->toArray());
     }
 
     public function testSettingNonExistentPropertyThrows(): void
@@ -157,6 +147,84 @@ class DataTransferObjectTypeTest extends TestCase
         SampleData::make(['union_prop' => false]);
     }
 
+    public function testSet(): void
+    {
+        $data = SampleData::make();
+        $data->set('simple_prop', 'foo');
+
+        self::assertSame(['simple_prop' => 'foo'], $data->toArray());
+    }
+
+    public function testSetArray(): void
+    {
+        $data = SampleData::make();
+        $data->set([
+            'simple_prop' => 'foo',
+            'nullable_prop' => 'bar',
+        ]);
+
+        self::assertSame([
+            'simple_prop' => 'foo',
+            'nullable_prop' => 'bar',
+        ], $data->toArray());
+    }
+
+    public function testBuiltinUnset(): void
+    {
+        $data = SampleData::make();
+        $data->simple_prop = 'foo';
+        $data->nullable_prop = 'bar';
+
+        self::assertEquals([
+            'simple_prop' => 'foo',
+            'nullable_prop' => 'bar',
+        ], $data->toArray());
+
+        unset($data->nullable_prop);
+
+        self::assertEquals(['simple_prop' => 'foo'], $data->toArray());
+    }
+
+    public function testUnset(): void
+    {
+        $data = SampleData::make();
+        $data->simple_prop = 'foo';
+        $data->nullable_prop = 'bar';
+
+        self::assertEquals([
+            'simple_prop' => 'foo',
+            'nullable_prop' => 'bar',
+        ], $data->toArray());
+
+        $data->unset('nullable_prop');
+
+        self::assertEquals(['simple_prop' => 'foo'], $data->toArray());
+    }
+
+    public function testUnsetSpread(): void
+    {
+        $data = SampleData::make();
+        $data->simple_prop = 'foo';
+        $data->nullable_prop = 'bar';
+
+        self::assertEquals([
+            'simple_prop' => 'foo',
+            'nullable_prop' => 'bar',
+        ], $data->toArray());
+
+        $data->unset('nullable_prop', 'simple_prop');
+
+        self::assertEquals([], $data->toArray());
+    }
+
+    public function testUnsettingNonExistentPropertyThrows(): void
+    {
+        self::expectException(DataTransferObjectException::class);
+        self::expectExceptionMessage('Public property $nope does not exist in class Tests\Fixtures\SampleData');
+
+        SampleData::make()->unset('nope');
+    }
+
     public function testMake(): void
     {
         $data = SampleData::make([
@@ -167,7 +235,6 @@ class DataTransferObjectTypeTest extends TestCase
         self::assertEquals([
             'simple_prop' => 'foo',
             'nullable_prop' => 'bar',
-            'mixed_prop' => null,
         ], $data->toArray());
     }
 

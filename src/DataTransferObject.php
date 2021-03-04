@@ -10,7 +10,8 @@ use ReflectionProperty;
 
 abstract class DataTransferObject
 {
-    private static array $propertyMap = [];
+    private array $data = [];
+    private array $propertyMap = [];
     private array $exceptNames = [];
     private array $onlyNames = [];
 
@@ -21,15 +22,15 @@ abstract class DataTransferObject
         $context = (new ContextFactory())->createFromReflector(new ReflectionClass($this));
 
         foreach (static::getAssignableProperties() as $property) {
-            self::$propertyMap[$property->name] = [
+            $this->propertyMap[$property->getName()] = [
                 'property' => $property,
                 'validator' => new TypeValidator($docblockFactory, $typeResolver, $context, $property),
             ];
+
+            unset($this->{$property->getName()});
         }
 
-        foreach ($parameters as $name => $value) {
-            $this->set($name, $value);
-        }
+        $this->set($parameters);
     }
 
     /** @return static */
@@ -46,12 +47,18 @@ abstract class DataTransferObject
                 $this->set($k, $v);
             }
         } else {
-            if (!array_key_exists($name, static::$propertyMap)) {
-                throw DataTransferObjectException::nonexistentProperty(static::class, $name);
-            }
-
-            static::$propertyMap[$name]['validator']->validate($value);
             $this->{$name} = $value;
+        }
+
+        return $this;
+    }
+
+    /** @return static */
+    public function unset(string ...$names): self
+    {
+        foreach ($names as $name) {
+            $this->assertPropertyExists($name);
+            unset($this->{$name});
         }
 
         return $this;
@@ -62,10 +69,7 @@ abstract class DataTransferObject
     {
         $arr = [];
 
-        $collectablePropertyNames = array_map(
-            static fn (ReflectionProperty $property): string => $property->name,
-            $this->getInitializedProperties()
-        );
+        $collectablePropertyNames = array_keys($this->data);
 
         if ($this->onlyNames) {
             $collectablePropertyNames = array_intersect($this->onlyNames, $collectablePropertyNames);
@@ -83,18 +87,9 @@ abstract class DataTransferObject
     /** @return mixed */
     private function resolveValue($name)
     {
-        $value = $this->{$name};
+        $value = $this->data[$name];
 
         return $value instanceof self ? $value->toArray() : $value;
-    }
-
-    /** @return array<ReflectionProperty> */
-    private function getInitializedProperties(): array
-    {
-        return array_filter(
-            static::getAssignableProperties(),
-            fn (ReflectionProperty $property): bool => $property->isInitialized($this)
-        );
     }
 
     /** @return array<ReflectionProperty> */
@@ -133,12 +128,34 @@ abstract class DataTransferObject
     {
         $this->onlyNames = [];
 
-        foreach ($this->getInitializedProperties() as $property) {
-            if ($property->getValue($this) !== null) {
-                $this->onlyNames[] = $property->getName();
+        foreach ($this->data as $name => $value) {
+            if ($value !== null) {
+                $this->onlyNames[] = $name;
             }
         }
 
         return $this;
+    }
+
+    private function assertPropertyExists(string $name): void
+    {
+        if (!array_key_exists($name, $this->propertyMap)) {
+            throw DataTransferObjectException::nonexistentProperty(static::class, $name);
+        }
+    }
+
+    public function __set($name, $value): void
+    {
+        $this->assertPropertyExists($name);
+
+        $this->propertyMap[$name]['validator']->validate($value);
+        $this->data[$name] = $value;
+    }
+
+    public function __unset($name): void
+    {
+        if (isset($this->data[$name])) {
+            unset($this->data[$name]);
+        }
     }
 }

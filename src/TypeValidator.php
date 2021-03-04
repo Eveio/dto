@@ -71,7 +71,11 @@ class TypeValidator
     {
         $nativeType = $this->property->getType();
 
-        return $nativeType ? [$nativeType->getName()] : [];
+        if ($nativeType) {
+            return $nativeType->allowsNull() ? ['NULL', $nativeType->getName()] : [$nativeType->getName()];
+        }
+
+        return [];
     }
 
     /** @return array<string> */

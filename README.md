@@ -225,3 +225,7 @@ eve/dto is inspired by and share some similarities with [spatie/data-transfer-ob
 * spatie/data-transfer-object requires all not-null properties to be supplied right from instantiation. This behavior is not always feasible or desirable (refer to the data patching example above). eve/dto opts for a much more forgiving approach, which allows a DTO to be created with any subset of properties.
 * spatie/data-transfer-object uses a custom RegExp to parse the docblocks. This approach is prone to bugs and has some limitations. For example, the type-hinted class must be an FQCN (Fully Qualified Class Name) i.e. `\App\Models\Author` instead of `Author`. Meanwhile, eve/dto use the official [ReflectionDocBlock](https://github.com/phpDocumentor/ReflectionDocBlock) and [TypeResolver](https://github.com/phpDocumentor/TypeResolver) packages from phpDocumentor to deal with docblocks and therefore doesn't have these issues.
 * spatie/data-transfer-object implements such features as "Data Transfer Object Collection" and "Flexible Data Transfer Objects." To keep things simple and concise, eve/dto doesn't have these implementations.
+
+## License
+
+MIT

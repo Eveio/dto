@@ -15,7 +15,7 @@ abstract class DataTransferObject
     private array $exceptNames = [];
     private array $onlyNames = [];
 
-    protected function __construct(array $parameters = [])
+    private function __construct(array $parameters = [])
     {
         $docblockFactory = DocBlockFactory::createInstance();
         $typeResolver = new TypeResolver();

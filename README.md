@@ -87,7 +87,7 @@ $data = UserCreationData::make([
    'email' => 'alice@company.tld',
    'password' => 'SoSecureWow',
    'age' => 30,
-];
+]);
 ```
 
 Alternatively, you can explicitly set the attributes. The code above is exactly the same as
@@ -191,7 +191,7 @@ $data->toArray(); // ['email' => 'alice@company.tld', 'password' => 'SoSecureWow
      'email' => 'alice@company.tld',
      'password' => 'SoSecureWow',
      'age' => 30,
-  ];
+  ]);
   
   $data->only('email', 'password')->toArray(); // ['email' => 'alice@company.tld', 'password' => 'SoSecureWow']
   ```
@@ -202,7 +202,7 @@ $data->toArray(); // ['email' => 'alice@company.tld', 'password' => 'SoSecureWow
      'email' => 'alice@company.tld',
      'password' => 'SoSecureWow',
      'age' => 30,
-  ];
+  ]);
   
   $data->except('email', 'password')->toArray(); // ['age' => 30]
   ```
@@ -213,7 +213,7 @@ $data->toArray(); // ['email' => 'alice@company.tld', 'password' => 'SoSecureWow
      'email' => 'alice@company.tld',
      'password' => 'SoSecureWow',
      'age' => null,
-  ];
+  ]);
   
   $data->compact()->toArray(); // ['email' => 'alice@company.tld', 'password' => 'SoSecureWow']
   ```

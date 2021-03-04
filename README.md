@@ -31,7 +31,7 @@ This _kind of_ works, but with several drawbacks:
 * One would always have to refer to the documentation (if one exists) for the "shape" of the array. This reduces both reusability and productivity. 
 * Static code analysis and IDE auto-completion support are greatly hindered. 
 
-Now imagine instead of using an arbitrary array, we use an object with strongly-typed properties
+Now imagine instead of using an arbitrary array, we use an object with strongly-typed properties:
 
 ```php
 // UserCreationData.php
@@ -95,8 +95,8 @@ Alternatively, you can explicitly set the attributes. The code above is exactly 
 ```php
 $data = UserCreationData::make();
 $data->email = 'alice@company.tld';
-$data->password => 'SoSecureWow';
-$data->age => 30;
+$data->password = 'SoSecureWow';
+$data->age = 30;
 ```
 
 Or you can use the fluent `set` method, which can take either an associative array or two separated `$name`, `$value` parameters:

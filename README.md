@@ -123,7 +123,7 @@ Then we can call the `toArray()` method to transform the object into an associat
 $arr = $data->toArray(); // ['email' => 'alice@company.tld', 'password' => 'SoSecureWow', 'age' => 30]
 ```
 
-Note that non-set properties will NOT be returned in the ouput array:
+Note that non-set properties will NOT be returned in the output array:
 
 ```php
 $data = UserCreationData::make();
@@ -220,10 +220,10 @@ $data->toArray(); // ['email' => 'alice@company.tld', 'password' => 'SoSecureWow
 
 ## Differences from spatie/data-transfer-object
 
-eve/dto is inspired by and share some similarities with [spatie/data-transfer-object](https://github.com/spatie/data-transfer-object), but the two packages have certain differences, the most significant of which are as follows:
+eve/dto is inspired by and shares some similarities with [spatie/data-transfer-object](https://github.com/spatie/data-transfer-object) but the two packages have certain differences, the most significant of which are as follows:
 
 * spatie/data-transfer-object requires all not-null properties to be supplied right from instantiation. This behavior is not always feasible or desirable (refer to the data patching example above). eve/dto opts for a much more forgiving approach, which allows a DTO to be created with any subset of properties.
-* spatie/data-transfer-object uses a custom RegExp to parse the docblocks. This approach is prone to bugs and has some limitations. For example, the type-hinted class must be an FQCN (Fully Qualified Class Name) i.e. `\App\Models\Author` instead of `Author`. Meanwhile, eve/dto use the official [ReflectionDocBlock](https://github.com/phpDocumentor/ReflectionDocBlock) and [TypeResolver](https://github.com/phpDocumentor/TypeResolver) packages from phpDocumentor to deal with docblocks and therefore doesn't have these issues.
+* spatie/data-transfer-object uses a custom RegExp to parse the docblocks. This approach is prone to bugs and has some limitations. For example, the type-hinted class must be an FQCN (Fully Qualified Class Name) i.e. `\App\Models\Author` instead of `Author`. Meanwhile, eve/dto uses the official [ReflectionDocBlock](https://github.com/phpDocumentor/ReflectionDocBlock) and [TypeResolver](https://github.com/phpDocumentor/TypeResolver) packages from phpDocumentor to deal with docblocks and therefore doesn't have these issues.
 * spatie/data-transfer-object implements such features as "Data Transfer Object Collection" and "Flexible Data Transfer Objects." To keep things simple and concise, eve/dto doesn't have these implementations.
 
 ## License

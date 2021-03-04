@@ -101,22 +101,16 @@ abstract class DataTransferObject
         );
     }
 
-    /**
-     * @param array<string> $names
-     * @return static
-     */
-    public function except(...$names): self
+    /** @return static */
+    public function except(string ...$names): self
     {
         $this->exceptNames = $names;
 
         return $this;
     }
 
-    /**
-     * @param array<string> $names
-     * @return static
-     */
-    public function only(...$names): self
+    /** @return static */
+    public function only(string ...$names): self
     {
         $this->onlyNames = $names;
 

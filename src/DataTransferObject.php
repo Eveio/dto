@@ -148,8 +148,6 @@ abstract class DataTransferObject
 
     public function __unset($name): void
     {
-        if (isset($this->data[$name])) {
-            unset($this->data[$name]);
-        }
+        unset($this->data[$name]);
     }
 }

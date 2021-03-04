@@ -55,7 +55,7 @@ public function store(CreateUserRequest $request)
 }
 ```
 
-With this approach, we have a clear idea of what fields to expect as user creation data, their types and other restrictions, and we can enjoy all type-hinting, auto-completion, static analysis etc. This is exactly what `eve/dto` allows you to do.
+With this approach, we have a clear idea of what fields to expect as user creation data, their types and other restrictions, and we can enjoy all type-hinting, auto-completion, static analysis etc. This is exactly what eve/dto allows you to do.
 
 ## Requirements and Installation
 

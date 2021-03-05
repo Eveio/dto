@@ -143,7 +143,7 @@ Instead of declaring your properties with built-in types, you can use type annot
 ```php
 use Carbon\Carbon;
 
-class NewOrderData \Eve\DTO\DataTransferObject 
+class NewOrderData extends \Eve\DTO\DataTransferObject 
 {
     /**
      * @var string|Carbon

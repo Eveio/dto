@@ -33,7 +33,7 @@ class TypeValidator
         $this->context = $context;
         $this->property = $property;
 
-        $this->allowedTypes = array_unique(array_merge($this->getNativeTypes(), $this->getDockBlockTypes()));
+        $this->allowedTypes = array_unique(array_merge($this->getNativeTypes(), $this->getDocBlockTypes()));
     }
 
     public function validate($value): void
@@ -79,7 +79,7 @@ class TypeValidator
     }
 
     /** @return array<string> */
-    private function getDockBlockTypes(): array
+    private function getDocBlockTypes(): array
     {
         if (!$this->property->getDocComment()) {
             return [];

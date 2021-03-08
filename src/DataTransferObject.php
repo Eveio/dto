@@ -5,27 +5,24 @@ namespace Eve\DTO;
 use phpDocumentor\Reflection\DocBlockFactory;
 use phpDocumentor\Reflection\TypeResolver;
 use phpDocumentor\Reflection\Types\ContextFactory;
-use ReflectionClass;
 use ReflectionProperty;
 
 abstract class DataTransferObject
 {
     private array $data = [];
     private array $propertyMap = [];
-    private array $exceptNames = [];
+    private array $excludedNames = [];
     private array $onlyNames = [];
 
     private function __construct(array $parameters = [])
     {
-        $reflectionClass = new ReflectionClass($this);
-
-        foreach (static::getAssignableProperties($reflectionClass) as $property) {
+        foreach (static::getAssignableProperties() as $property) {
             $this->propertyMap[$property->getName()] = [
                 'property' => $property,
                 'validator' => new TypeValidator(
                     DocBlockFactory::createInstance(),
                     new TypeResolver(),
-                    (new ContextFactory())->createFromReflector($reflectionClass),
+                    (new ContextFactory())->createFromReflector(ReflectionResolver::resolve(static::class)),
                     $property
                 ),
             ];
@@ -81,7 +78,7 @@ abstract class DataTransferObject
             $collectablePropertyNames = array_intersect($this->onlyNames, $collectablePropertyNames);
         }
 
-        $collectablePropertyNames = array_diff($collectablePropertyNames, $this->exceptNames);
+        $collectablePropertyNames = array_diff($collectablePropertyNames, $this->excludedNames);
 
         foreach ($collectablePropertyNames as $name) {
             $arr[$name] = $this->resolveValue($name);
@@ -99,10 +96,10 @@ abstract class DataTransferObject
     }
 
     /** @return array<ReflectionProperty> */
-    private static function getAssignableProperties(ReflectionClass $reflectionClass): array
+    private static function getAssignableProperties(): array
     {
         return array_filter(
-            $reflectionClass->getProperties(ReflectionProperty::IS_PUBLIC),
+            ReflectionResolver::resolve(static::class)->getProperties(ReflectionProperty::IS_PUBLIC),
             static fn (ReflectionProperty $property): bool => !$property->isStatic()
         );
     }
@@ -110,7 +107,7 @@ abstract class DataTransferObject
     /** @return static */
     public function except(string ...$names): self
     {
-        $this->exceptNames = $names;
+        $this->excludedNames = $names;
 
         return $this;
     }

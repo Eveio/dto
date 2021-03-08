@@ -17,14 +17,17 @@ abstract class DataTransferObject
 
     private function __construct(array $parameters = [])
     {
-        $docblockFactory = DocBlockFactory::createInstance();
-        $typeResolver = new TypeResolver();
-        $context = (new ContextFactory())->createFromReflector(new ReflectionClass($this));
+        $reflectionClass = new ReflectionClass($this);
 
-        foreach (static::getAssignableProperties() as $property) {
+        foreach (static::getAssignableProperties($reflectionClass) as $property) {
             $this->propertyMap[$property->getName()] = [
                 'property' => $property,
-                'validator' => new TypeValidator($docblockFactory, $typeResolver, $context, $property),
+                'validator' => new TypeValidator(
+                    DocBlockFactory::createInstance(),
+                    new TypeResolver(),
+                    (new ContextFactory())->createFromReflector($reflectionClass),
+                    $property
+                ),
             ];
 
             unset($this->{$property->getName()});
@@ -96,10 +99,10 @@ abstract class DataTransferObject
     }
 
     /** @return array<ReflectionProperty> */
-    private static function getAssignableProperties(): array
+    private static function getAssignableProperties(ReflectionClass $reflectionClass): array
     {
         return array_filter(
-            (new ReflectionClass(static::class))->getProperties(ReflectionProperty::IS_PUBLIC),
+            $reflectionClass->getProperties(ReflectionProperty::IS_PUBLIC),
             static fn (ReflectionProperty $property): bool => !$property->isStatic()
         );
     }

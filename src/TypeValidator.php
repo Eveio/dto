@@ -87,10 +87,10 @@ class TypeValidator
 
         $types = [];
 
-        $docblock = $this->docBlockFactory->create($this->property);
+        $docBlock = $this->docBlockFactory->create($this->property);
 
         /** @var Var_ $tag */
-        foreach ($docblock->getTagsByName('var') as $tag) {
+        foreach ($docBlock->getTagsByName('var') as $tag) {
             foreach ($tag->getType() as $type) {
                 $types[] = (string) $this->typeResolver->resolve(ltrim($type, '\\'), $this->context);
             }

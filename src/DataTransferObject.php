@@ -39,7 +39,10 @@ abstract class DataTransferObject
         return new static($parameters);
     }
 
-    /** @param string|array $name */
+    /**
+     * @param string|array $name
+     * @return static
+     */
     public function set($name, $value = null): self
     {
         if (is_array($name)) {

@@ -7,6 +7,7 @@ use phpDocumentor\Reflection\DocBlockFactory;
 use phpDocumentor\Reflection\TypeResolver;
 use phpDocumentor\Reflection\Types\Context;
 use ReflectionProperty;
+use ReflectionType;
 
 class TypeValidator
 {
@@ -33,7 +34,12 @@ class TypeValidator
         $this->context = $context;
         $this->property = $property;
 
-        $this->allowedTypes = array_unique(array_merge($this->getNativeTypes(), $this->getDocBlockTypes()));
+        $this->allowedTypes = array_unique(
+            array_merge(
+                $this->getNativeTypes($this->property->getType()),
+                $this->getDocBlockTypes()
+            )
+        );
     }
 
     public function validate($value): void
@@ -67,12 +73,25 @@ class TypeValidator
     }
 
     /** @return array<string> */
-    private function getNativeTypes(): array
+    private function getNativeTypes(?ReflectionType $type): array
     {
-        $nativeType = $this->property->getType();
+        if (!$type) {
+            return [];
+        }
 
-        if ($nativeType) {
-            return $nativeType->allowsNull() ? ['NULL', $nativeType->getName()] : [$nativeType->getName()];
+        if (method_exists($type, 'getName')) {
+            return $type->allowsNull() ? ['NULL', $type->getName()] : [$type->getName()];
+        }
+
+        // @see https://www.php.net/manual/en/reflectionuniontype.gettypes.php
+        if (method_exists($type, 'getTypes')) {
+            $typeNames = [];
+
+            foreach ($type->getTypes() as $subType) {
+                $typeNames = array_merge($typeNames, $this->getNativeTypes($subType));
+            }
+
+            return $typeNames;
         }
 
         return [];

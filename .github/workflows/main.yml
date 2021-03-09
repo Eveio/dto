@@ -4,23 +4,30 @@ on: [push]
 
 jobs:
   run:
+    name: PHP ${{ matrix.php-version }} (${{ matrix.experimental && 'experimental' || 'full support' }})
     runs-on: ubuntu-latest
-
+    continue-on-error: ${{ matrix.experimental }}
+    strategy:
+      matrix:
+        php-version: [7.4, 8.0]
+        experimental: [false]
+        include:
+          - php-version: 8.1
+            experimental: true
+      fail-fast: false
     steps:
       - name: Check out
         uses: actions/checkout@v2
         with:
           fetch-depth: 2
-
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 7.4
-
+          php-version: ${{ matrix.php-version }}
+          tools: composer:v2
       - name: Install dependencies
-        run: composer install --no-progress --prefer-dist --optimize-autoloader
-
-      - name: Run checks and tests
-        run: |
-          composer cs
-          composer test
+        uses: ramsey/composer-install@v1
+        with:
+          composer-options: --prefer-dist
+      - name: Run tests
+        run: composer test

@@ -59,11 +59,13 @@ With this approach, we have a clear idea of what fields to expect as user creati
 
 ## Requirements and Installation
 
-This package requires PHP^7.4. You can install it via Composer:
+You can install eve/dto via Composer:
 
 ```bash
 composer require eve/dto
 ```
+
+This package requires PHP>7.4.
 
 ## Usage
 

@@ -8,7 +8,7 @@ use Tests\Fixtures\Foo;
 use Tests\Fixtures\NestedData;
 use Tests\Fixtures\SampleData;
 
-class DataTransferObjectTypeTest extends TestCase
+class DataTransferObjectTest extends TestCase
 {
     public function testSimpleProperty(): void
     {

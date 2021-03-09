@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "989c69187d06aa3eaf4bd1232dc4925f",
+    "content-hash": "60417d4a704fc695f41d87aa53504f44",
     "packages": [
         {
             "name": "phpdocumentor/reflection-common",
@@ -2369,7 +2369,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "^7.4|^8.1"
+        "php": "^7.4|^8.0"
     },
     "platform-dev": [],
     "plugin-api-version": "2.0.0"

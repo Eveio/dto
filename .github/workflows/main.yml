@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-version: [ 7.4, 8.0, 8.1 ]
+        php-version: [ 8.0 ]
 
     steps:
       - name: Check out
@@ -26,5 +26,4 @@ jobs:
 
       - name: Run checks and tests
         run: |
-          composer cs
           composer test

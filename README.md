@@ -1,5 +1,6 @@
 # eve/dto
 [![Main](https://github.com/Eveio/dto/actions/workflows/main.yml/badge.svg)](https://github.com/Eveio/dto/actions/workflows/main.yml)
+[![Latest version](https://badgen.net/packagist/v/eve/dto)](https://packagist.org/packages/eve/dto)
 
 A simplistic, flexible Data Transfer Object library written in PHP.
 

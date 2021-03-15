@@ -22,7 +22,7 @@ The method can be called by e.g., a controller this way:
 // UserController.php
 public function store(CreateUserRequest $request)
 {
-    $this->userService->create($request->validated());
+    $this->userService->create($request->toArray());
 }
 ```
 

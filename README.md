@@ -65,7 +65,7 @@ You can install eve/dto via Composer:
 composer require eve/dto
 ```
 
-This package requires PHP>7.4.
+This package requires PHP ≥7.4.
 
 ## Usage
 

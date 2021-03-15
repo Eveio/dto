@@ -93,7 +93,7 @@ $data = UserCreationData::make([
 ]);
 ```
 
-Alternatively, you can explicitly set the attributes. The code above is exactly the same as
+Alternatively, you can explicitly set the attributes. The code above is essentially the same as:
 
 ```php
 $data = UserCreationData::make();

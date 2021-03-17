@@ -52,7 +52,7 @@ class TypeValidator
         $actualType = gettype($value);
 
         foreach ($this->allowedTypes as $type) {
-            if ($actualType === $type) {
+            if (strtolower($actualType) === strtolower($type)) {
                 return;
             }
 

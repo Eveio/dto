@@ -97,6 +97,31 @@ class DataTransferObjectTest extends TestCase
         self::assertEquals(['union_prop' => $value], $data->toArray());
     }
 
+    public function testNullableTypeViaDocBlockProperty(): void
+    {
+        $data = SampleData::make(['nullable_doctype_prop' => null]);
+
+        self::assertEquals(['nullable_doctype_prop' => null], $data->toArray());
+    }
+
+    /** @return array<mixed> */
+    public function provideMixedCaseTypeValues(): array
+    {
+        return [
+            [false],
+            [100],
+            ['foo'],
+        ];
+    }
+
+    /** @dataProvider provideMixedCaseTypeValues */
+    public function testMixedCaseTypeDocBlockProperty($value): void
+    {
+        $data = SampleData::make(['mixed_case_type_prop' => $value]);
+
+        self::assertEquals(['mixed_case_type_prop' => $value], $data->toArray());
+    }
+
     public function testNativeNullablePropertyAcceptsNull(): void
     {
         $data = SampleData::make();

@@ -20,5 +20,11 @@ class SampleData extends DataTransferObject
     /** @var Foo|string */
     public string $union_prop;
 
+    /** @var string|null */
+    public $nullable_doctype_prop;
+
+    /** @var Boolean|Int|String */
+    public $mixed_case_type_prop;
+
     public NestedData $nested;
 }

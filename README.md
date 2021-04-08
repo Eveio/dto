@@ -209,7 +209,7 @@ $data->toArray(); // ['email' => 'alice@company.tld', 'password' => 'SoSecureWow
 Though eve/dto is inspired by and shares some similarities with [spatie/data-transfer-object](https://github.com/spatie/data-transfer-object), the two packages have certain differences, the most significant of which are as follows:
 
 * spatie/data-transfer-object requires all not-null properties to be supplied right from instantiation. This behavior is not always feasible or desirable (refer to the data patching example above). eve/dto opts for a much more forgiving approach, which allows a DTO to be created with any subset of properties. 
-* spatie/data-transfer-object can't detect or prevent you from assigning a non-existent property directly (e.g., `$userData->non_existent = 'foo'`), which is something eve/dto does to help ensure your object's integrity.   
+* spatie/data-transfer-object can't detect or prevent you from assigning a non-existent property directly (e.g., `$userData->non_existent = 'foo'`), which is something eve/dto does to help ensure your object's integrity.
 * spatie/data-transfer-object implements such features as "Data Transfer Object Collection" and "Flexible Data Transfer Objects." To keep things simple and concise, eve/dto doesn't have these implementations.
 
 ## License

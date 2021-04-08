@@ -7,14 +7,14 @@ use ReflectionProperty;
 abstract class DataTransferObject
 {
     private array $data = [];
-    private array $propertyMap = [];
+    private array $propertyNames = [];
     private array $excludedNames = [];
     private array $onlyNames = [];
 
     private function __construct(array $parameters = [])
     {
         foreach (static::getAssignableProperties() as $property) {
-            $this->propertyMap[$property->getName()] = $property;
+            $this->propertyNames[] = $property->getName();
             unset($this->{$property->getName()});
         }
 
@@ -124,7 +124,7 @@ abstract class DataTransferObject
 
     private function assertPropertyExists(string $name): void
     {
-        if (!array_key_exists($name, $this->propertyMap)) {
+        if (!in_array($name, $this->propertyNames, true)) {
             throw DataTransferObjectException::nonexistentProperty(static::class, $name);
         }
     }

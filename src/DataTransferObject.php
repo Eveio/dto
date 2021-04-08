@@ -2,9 +2,6 @@
 
 namespace Eve\DTO;
 
-use phpDocumentor\Reflection\DocBlockFactory;
-use phpDocumentor\Reflection\TypeResolver;
-use phpDocumentor\Reflection\Types\ContextFactory;
 use ReflectionProperty;
 
 abstract class DataTransferObject
@@ -17,16 +14,7 @@ abstract class DataTransferObject
     private function __construct(array $parameters = [])
     {
         foreach (static::getAssignableProperties() as $property) {
-            $this->propertyMap[$property->getName()] = [
-                'property' => $property,
-                'validator' => new TypeValidator(
-                    DocBlockFactory::createInstance(),
-                    new TypeResolver(),
-                    (new ContextFactory())->createFromReflector(ReflectionResolver::resolve(static::class)),
-                    $property
-                ),
-            ];
-
+            $this->propertyMap[$property->getName()] = $property;
             unset($this->{$property->getName()});
         }
 
@@ -144,8 +132,6 @@ abstract class DataTransferObject
     public function __set($name, $value): void
     {
         $this->assertPropertyExists($name);
-
-        $this->propertyMap[$name]['validator']->validate($value);
         $this->data[$name] = $value;
     }
 

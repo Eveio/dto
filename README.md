@@ -32,7 +32,7 @@ This _kind of_ works, but with several drawbacks:
 * One would always have to refer to the documentation (if one exists) for the "shape" of the array. This reduces both reusability and productivity. 
 * Static code analysis and IDE auto-completion support are greatly hindered. 
 
-Now imagine instead of using an arbitrary array, we use an object with strongly-typed properties:
+Now imagine instead of using an arbitrary array, we use an object with typed properties:
 
 ```php
 // UserCreationData.php
@@ -67,6 +67,10 @@ composer require eve/dto
 ```
 
 This package requires PHP ≥7.4.
+
+### Migrate from v1.x
+
+v1.x versions of this library include a strict type check—for example, assigning a string to a boolean property will throw an error. Though certainly useful, this feature doesn't belong in the scope of a DTO and has been removed from v2. You're encouraged to use a static analysis tool like [PHPStan](https://github.com/phpstan/phpstan) or [Psalm](https://psalm.dev) for the task instead.
 
 ## Usage
 
@@ -113,11 +117,10 @@ $data = UserCreationData::make()
     ]);
 ```
 
-If any of the passed properties doesn't exist in the class definition or if the types don't match (notice that a non-type public property e.g., `public $whatever` accepts all types), an exception will be thrown:
+If any of the passed properties doesn't exist in the class definition, an exception will be thrown:
 
 ```php
 UserCreationData::make(['nope' => 'bar']); // throws "Public property $nope does not exist in class UserCreationData"
-UserCreationData::make(['email' => new Foo()]); // throws 'UserCreationData::$email must be of type string, received a value of type Foo.',
 ```
 
 Then we can call the `toArray()` method to transform the object into an associative array:
@@ -126,7 +129,7 @@ Then we can call the `toArray()` method to transform the object into an associat
 $arr = $data->toArray(); // ['email' => 'alice@company.tld', 'password' => 'SoSecureWow', 'age' => 30]
 ```
 
-Note that non-set properties will NOT be returned in the output array:
+Note that non-set properties will NOT be included in the output array:
 
 ```php
 $data = UserCreationData::make();
@@ -138,26 +141,6 @@ $arr = $data->toArray(); // ['email' => 'alice@company.tld']
 ```
 
 This is especially handy e.g., if you have a method to patch a database record, as it allows the operation to be totally flexible—you can patch all properties or only a subset of them.
-
-### Type Annotations with DocBlock
-
-Instead of declaring your properties with built-in types, you can use type annotations with DockBlock. This is particularly useful if the property accepts multiple types—in fact, it's the only way to declare such in PHP<8. All type restrictions will be respected as normal:
-
-```php
-use Carbon\Carbon;
-
-class NewOrderData extends \Eve\DTO\DataTransferObject 
-{
-    /**
-     * @var string|Carbon
-     */
-    public $order_date;
-}
-
-NewOrderData::make(['order_date' => '2021-01-02 12:34:56']); // works
-NewOrderData::make(['order_date' => Carbon::now()]); // works
-NewOrderData::make(['order_date' => false]); // throws
-```
 
 ### Nested DTOs
 
@@ -223,10 +206,10 @@ $data->toArray(); // ['email' => 'alice@company.tld', 'password' => 'SoSecureWow
 
 ## Differences from spatie/data-transfer-object
 
-eve/dto is inspired by and shares some similarities with [spatie/data-transfer-object](https://github.com/spatie/data-transfer-object) but the two packages have certain differences, the most significant of which are as follows:
+Though eve/dto is inspired by and shares some similarities with [spatie/data-transfer-object](https://github.com/spatie/data-transfer-object), the two packages have certain differences, the most significant of which are as follows:
 
-* spatie/data-transfer-object requires all not-null properties to be supplied right from instantiation. This behavior is not always feasible or desirable (refer to the data patching example above). eve/dto opts for a much more forgiving approach, which allows a DTO to be created with any subset of properties.
-* spatie/data-transfer-object uses a custom RegExp to parse the docblocks. This approach is prone to bugs and has some limitations. For example, the type-hinted class must be an FQCN (Fully Qualified Class Name) i.e. `\App\Models\Author` instead of `Author`. Meanwhile, eve/dto uses the official [ReflectionDocBlock](https://github.com/phpDocumentor/ReflectionDocBlock) and [TypeResolver](https://github.com/phpDocumentor/TypeResolver) packages from phpDocumentor to deal with docblocks and therefore doesn't have these issues.
+* spatie/data-transfer-object requires all not-null properties to be supplied right from instantiation. This behavior is not always feasible or desirable (refer to the data patching example above). eve/dto opts for a much more forgiving approach, which allows a DTO to be created with any subset of properties. 
+* spatie/data-transfer-object can't detect or prevent you from assigning a non-existent property directly (e.g., `$userData->non_existent = 'foo'`), which is something eve/dto does to help ensure your object's integrity.   
 * spatie/data-transfer-object implements such features as "Data Transfer Object Collection" and "Flexible Data Transfer Objects." To keep things simple and concise, eve/dto doesn't have these implementations.
 
 ## License

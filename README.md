@@ -209,6 +209,7 @@ $data->toArray(); // ['email' => 'alice@company.tld', 'password' => 'SoSecureWow
      'email' => 'alice@company.tld',
      'password' => 'SoSecureWow',
   ]);
+
   $data->get('email'); // 'alice@company.tld'
   $data->password; // 'SoSecureWow'
   ```  

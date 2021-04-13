@@ -149,14 +149,11 @@ abstract class DataTransferObject
         unset($this->data[$name]);
     }
 
-    /**
-     * @param $name
-     * @return mixed
-     * @throws DataTransferObjectException
-     */
+    /** @return mixed */
     public function __get($name)
     {
         $this->assertPropertyExists($name);
+
         return $this->data[$name];
     }
 }

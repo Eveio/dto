@@ -213,7 +213,6 @@ class DataTransferObjectTest extends TestCase
             'mixed_prop' => 'baz',
             'object_prop' => $foo,
         ]);
-        var_dump($data->nullable_prop);
         self::assertEquals('foo', $data->get('simple_prop'));
         self::assertEquals('bar', $data->get('nullable_prop'));
         self::assertEquals('baz', $data->get('mixed_prop'));

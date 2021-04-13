@@ -218,4 +218,17 @@ class DataTransferObjectTest extends TestCase
         self::assertEquals('baz', $data->get('mixed_prop'));
         self::assertEquals($foo, $data->get('object_prop'));
     }
+
+    public function testGetNotExistPropertyWillThrow()
+    {
+        $data = SampleData::make([
+            'simple_prop' => 'foo',
+            'nullable_prop' => 'bar',
+            'mixed_prop' => 'baz',
+        ]);
+
+        self::expectException(DataTransferObjectException::class);
+        self::expectExceptionMessage('Public property $nope does not exist in class Tests\Fixtures\SampleData');
+        $data->nope;
+    }
 }

@@ -203,7 +203,7 @@ $data->toArray(); // ['email' => 'alice@company.tld', 'password' => 'SoSecureWow
   
   $data->compact()->toArray(); // ['email' => 'alice@company.tld', 'password' => 'SoSecureWow']
   ```
-* `DataTransferObject::get($name): mixed` returns the value of `$name` property.
+* `DataTransferObject::get(string $name): mixed` returns the value of `$name` property. If `$name` doesn't exist, an exception will be thrown.
   ```php
   $data = UserCreationData::make([
      'email' => 'alice@company.tld',
@@ -212,6 +212,8 @@ $data->toArray(); // ['email' => 'alice@company.tld', 'password' => 'SoSecureWow
 
   $data->get('email'); // 'alice@company.tld'
   $data->password; // 'SoSecureWow'
+
+  $data->nope; // throws "Public property $nope does not exist in class UserCreationData"
   ```  
 
 ## Differences from spatie/data-transfer-object

@@ -203,6 +203,16 @@ $data->toArray(); // ['email' => 'alice@company.tld', 'password' => 'SoSecureWow
   
   $data->compact()->toArray(); // ['email' => 'alice@company.tld', 'password' => 'SoSecureWow']
   ```
+* `DataTransferObject::get($name): mixed` returns the value of `$name` property.
+  ```php
+  $data = UserCreationData::make([
+     'email' => 'alice@company.tld',
+     'password' => 'SoSecureWow',
+  ]);
+
+  $data->get('email'); // 'alice@company.tld'
+  $data->password; // 'SoSecureWow'
+  ```  
 
 ## Differences from spatie/data-transfer-object
 

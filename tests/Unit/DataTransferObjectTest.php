@@ -203,4 +203,20 @@ class DataTransferObjectTest extends TestCase
 
         self::assertEquals(['nested' => ['sample_prop' => 'sample']], $data->compact()->toArray());
     }
+
+    public function testPropertyAccess(): void
+    {
+        $data = SampleData::make(['simple_prop' => 'foo']);
+        
+        self::assertSame('foo', $data->get('simple_prop'));
+        self::assertSame('foo', $data->simple_prop);
+    }
+
+    public function testAccessingNonExistentPropertyWillThrow(): void
+    {
+        self::expectException(DataTransferObjectException::class);
+        self::expectExceptionMessage('Public property $nope does not exist in class Tests\Fixtures\SampleData');
+
+        echo SampleData::make()->nope;
+    }
 }

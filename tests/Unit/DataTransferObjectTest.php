@@ -203,4 +203,20 @@ class DataTransferObjectTest extends TestCase
 
         self::assertEquals(['nested' => ['sample_prop' => 'sample']], $data->compact()->toArray());
     }
+
+    public function testGet()
+    {
+        $foo = new Foo;
+        $data = SampleData::make([
+            'simple_prop' => 'foo',
+            'nullable_prop' => 'bar',
+            'mixed_prop' => 'baz',
+            'object_prop' => $foo,
+        ]);
+        var_dump($data->nullable_prop);
+        self::assertEquals('foo', $data->get('simple_prop'));
+        self::assertEquals('bar', $data->get('nullable_prop'));
+        self::assertEquals('baz', $data->get('mixed_prop'));
+        self::assertEquals($foo, $data->get('object_prop'));
+    }
 }

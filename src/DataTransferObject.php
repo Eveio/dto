@@ -44,6 +44,15 @@ abstract class DataTransferObject
         return $this;
     }
 
+    /**
+     * @param $name
+     * @return mixed
+     */
+    public function get($name)
+    {
+        return $this->{$name};
+    }
+
     /** @return static */
     public function unset(string ...$names): self
     {
@@ -138,5 +147,16 @@ abstract class DataTransferObject
     public function __unset($name): void
     {
         unset($this->data[$name]);
+    }
+
+    /**
+     * @param $name
+     * @return mixed
+     * @throws DataTransferObjectException
+     */
+    public function __get($name)
+    {
+        $this->assertPropertyExists($name);
+        return $this->data[$name];
     }
 }

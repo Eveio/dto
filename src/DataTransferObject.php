@@ -15,6 +15,11 @@ abstract class DataTransferObject
     {
         foreach (static::getAssignableProperties() as $property) {
             $this->propertyNames[] = $property->getName();
+
+            if ($property->isInitialized($this)) {
+                $this->data[$property->getName()] = $property->getValue($this);
+            }
+
             unset($this->{$property->getName()});
         }
 
@@ -44,13 +49,12 @@ abstract class DataTransferObject
         return $this;
     }
 
-    /**
-     * @param $name
-     * @return mixed
-     */
-    public function get($name)
+    /** @return mixed */
+    public function get(string $name, $default = null)
     {
-        return $this->{$name};
+        $this->assertPropertyExists($name);
+
+        return array_key_exists($name, $this->data) ? $this->data[$name] : $default;
     }
 
     /** @return static */
@@ -138,6 +142,13 @@ abstract class DataTransferObject
         }
     }
 
+    private function assertPropertyInitialized(string $name): void
+    {
+        if (!array_key_exists($name, $this->data)) {
+            throw DataTransferObjectException::propertyNotInitialized(static::class, $name);
+        }
+    }
+
     public function __set($name, $value): void
     {
         $this->assertPropertyExists($name);
@@ -153,6 +164,7 @@ abstract class DataTransferObject
     public function __get($name)
     {
         $this->assertPropertyExists($name);
+        $this->assertPropertyInitialized($name);
 
         return $this->data[$name];
     }

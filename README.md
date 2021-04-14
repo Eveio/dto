@@ -203,7 +203,9 @@ $data->toArray(); // ['email' => 'alice@company.tld', 'password' => 'SoSecureWow
   
   $data->compact()->toArray(); // ['email' => 'alice@company.tld', 'password' => 'SoSecureWow']
   ```
-* `DataTransferObject::get(string $name): mixed` returns the value of `$name` property. If `$name` doesn't exist, an exception will be thrown.
+* `DataTransferObject::get(string $name, $default = null): mixed` returns the value of `$name` property. 
+If `$name` doesn't exist in the class definition, an exception will be thrown. If `$name` exists but not initialized, `$default` will be returned.
+  > Important: PHP treats non-typed properties e.g., `public $prop` as **initialized with NULL**.
   ```php
   $data = UserCreationData::make([
      'email' => 'alice@company.tld',
@@ -212,8 +214,12 @@ $data->toArray(); // ['email' => 'alice@company.tld', 'password' => 'SoSecureWow
 
   $data->get('email'); // 'alice@company.tld'
   $data->password; // 'SoSecureWow'
+  
+  $data->age; // throws "UserCreationData::$age must not be accessed before initialization."
+  $data->get('age', 30); // 30
 
-  $data->nope; // throws "Public property $nope does not exist in class UserCreationData"
+  $data->get('nope'); // throws "Public property $nope does not exist in class UserCreationData."
+  $data->nope; // throws "Public property $nope does not exist in class UserCreationData."
   ```  
 
 ## Differences from spatie/data-transfer-object

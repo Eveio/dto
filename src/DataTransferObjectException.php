@@ -17,7 +17,7 @@ class DataTransferObjectException extends Exception
         return new static(sprintf('Public property $%s does not exist in class %s.', $propertyName, $class));
     }
 
-    public static function propertyNotInitialized(string $class, string $propertyName)
+    public static function propertyNotInitialized(string $class, string $propertyName): self
     {
         return new static(sprintf('%s::$%s must not be accessed before initialization.', $class, $propertyName));
     }

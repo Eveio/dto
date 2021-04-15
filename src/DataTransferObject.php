@@ -108,6 +108,7 @@ abstract class DataTransferObject
     /** @return static */
     public function except(string ...$names): self
     {
+        $this->assertPropertyExists(...$names);
         $this->excludedNames = $names;
 
         return $this;
@@ -116,6 +117,7 @@ abstract class DataTransferObject
     /** @return static */
     public function only(string ...$names): self
     {
+        $this->assertPropertyExists(...$names);
         $this->onlyNames = $names;
 
         return $this;
@@ -135,17 +137,21 @@ abstract class DataTransferObject
         return $this;
     }
 
-    private function assertPropertyExists(string $name): void
+    private function assertPropertyExists(string ...$names): void
     {
-        if (!in_array($name, $this->propertyNames, true)) {
-            throw DataTransferObjectException::nonexistentProperty(static::class, $name);
+        foreach ($names as $name) {
+            if (!in_array($name, $this->propertyNames, true)) {
+                throw DataTransferObjectException::nonexistentProperty(static::class, $name);
+            }
         }
     }
 
-    private function assertPropertyInitialized(string $name): void
+    private function assertPropertyInitialized(string ...$names): void
     {
-        if (!array_key_exists($name, $this->data)) {
-            throw DataTransferObjectException::propertyNotInitialized(static::class, $name);
+        foreach ($names as $name) {
+            if (!array_key_exists($name, $this->data)) {
+                throw DataTransferObjectException::propertyNotInitialized(static::class, $name);
+            }
         }
     }
 

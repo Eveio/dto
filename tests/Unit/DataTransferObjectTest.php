@@ -200,6 +200,14 @@ class DataTransferObjectTest extends TestCase
         ], $data->only('simple_prop', 'initialized_prop')->toArray());
     }
 
+    public function testOnlyThrowsIfPropertyDoesNotExist(): void
+    {
+        self::expectException(DataTransferObjectException::class);
+        self::expectExceptionMessage('Public property $nope does not exist in class Tests\Fixtures\SampleData');
+
+        SampleData::make()->only('simple_prop', 'nope')->toArray();
+    }
+
     public function testExcept(): void
     {
         $data = SampleData::make([
@@ -224,6 +232,14 @@ class DataTransferObjectTest extends TestCase
             ['initialized_prop' => 'Initialized'],
             $data->except('simple_prop', 'nullable_prop')->toArray()
         );
+    }
+
+    public function testExceptThrowsIfPropertyDoesNotExist(): void
+    {
+        self::expectException(DataTransferObjectException::class);
+        self::expectExceptionMessage('Public property $nope does not exist in class Tests\Fixtures\SampleData');
+
+        SampleData::make()->except('nope')->toArray();
     }
 
     public function testNestedDTO(): void
